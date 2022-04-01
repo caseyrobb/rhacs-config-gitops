@@ -5,4 +5,3 @@ auth-provider-job.yaml
 acsadmins-group.yaml
 *-payload.json
 extras
-./kustomization.yaml
