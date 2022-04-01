@@ -1,0 +1,77 @@
+kind: Job
+apiVersion: batch/v1
+metadata:
+  name: notifier-config-job
+  namespace: stackrox
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  template:
+    metadata:
+      name: notifier-config-job
+      namespace: stackrox
+    spec:
+      containers:
+        - name: notifier-config-proc
+          image: registry.access.redhat.com/ubi8/python-39
+          command:
+            - /bin/bash
+            - '-c'
+            - |
+              pip install -q -U requests 2>/dev/null
+              cat << EOF > notifiers-config.py
+
+              import requests
+              import json
+              import os
+
+              CENTRAL = os.environ.get("CENTRAL")
+              ACS_ADMIN_PASSWORD = os.environ.get("ACS_ADMIN_PASSWORD")
+
+              r = requests.get(f"{CENTRAL}/v1/notifiers", verify=False, auth=("admin", ACS_ADMIN_PASSWORD))
+              notifiers = json.loads(r.text)
+
+              prev_notifiers = [x for x in notifiers["notifiers"]]
+              
+              for notifier in prev_notifiers:
+                print(f"Deleting {notifier['name']}")
+                s = requests.delete(
+                    f"{CENTRAL}/v1/notifiers/{notifier['id']}",
+                    verify=False,
+                    auth=("admin", ACS_ADMIN_PASSWORD)
+                )
+                print(s.status_code)
+              
+              with open("/tmp/notifier-payload.json", "r") as f:
+                new_notifiers = json.load(f)
+                for notifier in new_notifiers["notifiers"]:
+                  print(f"Adding {notifier['name']}")
+                  s = requests.post(
+                    f"{CENTRAL}/v1/notifiers",
+                    verify=False,
+                    auth=("admin", ACS_ADMIN_PASSWORD),
+                    data=json.dumps(notifier)
+                  )
+                  print(s.status_code)
+
+              EOF
+
+              python -Wignore notifiers-config.py
+          
+          volumeMounts:
+          - name: notifier-payload
+            mountPath: /tmp
+          env:
+            - name: ACS_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: acs-central-admin-password
+                  key: password
+            - name: CENTRAL
+              value: https://central-stackrox.apps.cluster-vp4jr.vp4jr.sandbox1862.opentlc.com/v1/notifiers
+      volumes:
+      - name: notifier-payload
+        secret:
+          secretName: notifier-payload
+      restartPolicy: Never

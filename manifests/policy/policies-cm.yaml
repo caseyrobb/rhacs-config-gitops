@@ -1,0 +1,88 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: policies-payload
+  namespace: stackrox
+data:
+  policies-payload.json: |
+    {
+      "policies": [
+        {
+          "name": "CVE-2021-4034 - polkit Privilege Escalation",
+          "description": "Alert on deployments with images containing the polkit pkexec vulnerability (CVE-2021-4034). The polkit package is designed to define and handle policies that allow unprivileged processes to communicate with privileged processes on a Linux system. Pkexec, part of polkit, is a tool that allows the user to execute commands as another user according to the polkit policy definitions using the setuid feature. The vulnerability found in pkexec allows an unprivileged local attacker to escalate privileges, bypassing any authentication and policies due to incorrect handling of the process’s argument vector.",
+          "rationale": "The primary risk for customers is the possibility of an unprivileged user gaining administrative privileges on the affected systems. The attacker must have login access to the target system to carry out the attack.",
+          "remediation": "https://access.redhat.com/errata/RHSA-2022:0267#packages",
+          "disabled": false,
+          "categories": ["Vulnerability Management"],
+          "fields": null,
+          "lifecycleStages": ["BUILD", "DEPLOY"],
+          "eventSource": "NOT_APPLICABLE",
+          "whitelists": [],
+          "exclusions": [],
+          "scope": [],
+          "severity": "CRITICAL_SEVERITY",
+          "enforcementActions": [],
+          "notifiers": [],
+          "lastUpdated": null,
+          "SORTName": "",
+          "SORTLifecycleStage": "",
+          "SORTEnforcement": false,
+          "policySections": [
+            {
+              "sectionName": "",
+              "policyGroups": [
+                {
+                  "fieldName": "CVE",
+                  "booleanOperator": "OR",
+                  "negate": false,
+                  "values": [{ "value": "CVE-2021-4034" }]
+                }
+              ]
+            }
+          ],
+          "mitreAttackVectors": [],
+          "criteriaLocked": true,
+          "mitreVectorsLocked": true,
+          "isDefault": false
+        },
+        {
+          "name": "CVE-2021-44228 - log4j Remote Code Execution vulnerability",
+          "description": "Alert on deployments with images containing the Log4Shell vulnerability (CVE-2021-44228). This is a flaw in the Java logging library Apache Log4j in versions from 2.0.0 and before as well as version 2.14.1.",
+          "rationale": "This vulnerability allows a remote attacker to execute code on the server if the system logs an attacker-controlled string value with the attacker's JNDI LDAP server lookup.",
+          "remediation": "Update the log4j libary to version 2.15.0 (which disables the feature by default), 2.16.0 (which removes the functionality) or later. If not possible to upgrade, there are two possible mitigations for this flaw in versions from 2.10 to 2.14.1: Set the system property log4j2.formatMsgNoLookups to true, or remove the JndiLookup class from the classpath.",
+          "disabled": false,
+          "categories": ["Vulnerability Management"],
+          "fields": null,
+          "lifecycleStages": ["BUILD", "DEPLOY"],
+          "eventSource": "NOT_APPLICABLE",
+          "whitelists": [],
+          "exclusions": [],
+          "scope": [],
+          "severity": "CRITICAL_SEVERITY",
+          "enforcementActions": [],
+          "notifiers": [],
+          "lastUpdated": null,
+          "SORTName": "",
+          "SORTLifecycleStage": "",
+          "SORTEnforcement": false,
+          "policySections": [
+            {
+              "sectionName": "",
+              "policyGroups": [
+                {
+                  "fieldName": "CVE",
+                  "booleanOperator": "OR",
+                  "negate": false,
+                  "values": [{ "value": "CVE-2021-44228" }]
+                }
+              ]
+            }
+          ],
+          "mitreAttackVectors": [],
+          "criteriaLocked": true,
+          "mitreVectorsLocked": true,
+          "isDefault": false
+        }
+      ]
+    }
+

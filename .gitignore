@@ -1,0 +1,7 @@
+acs-admin-password-secret.yaml
+acs-config-manager-app.yaml
+acs-config-proj.yaml
+argocd-app-controller-crb.yaml
+auth-provider-job.yaml
+acsadmins-group.yaml
+kustomization.yaml

@@ -1,0 +1,72 @@
+kind: Job
+apiVersion: batch/v1
+metadata:
+  name: policy-config-job
+  namespace: stackrox
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  template:
+    metadata:
+      name: policy-config-job
+      namespace: stackrox
+    spec:
+      containers:
+        - name: policy-config-proc
+          image: registry.access.redhat.com/ubi8/python-39
+          command:
+            - /bin/bash
+            - '-c'
+            - |
+              pip install -q -U requests 2>/dev/null
+              cat << EOF > policy-config.py
+
+              import requests
+              import json
+              import os
+              
+              CENTRAL = os.environ.get("CENTRAL")
+              ACS_ADMIN_PASSWORD = os.environ.get("ACS_ADMIN_PASSWORD")
+              
+              r = requests.get(CENTRAL, verify=False, auth=("admin", ACS_ADMIN_PASSWORD))
+              policies = json.loads(r.text)
+              
+              defined_policies = [x for x in policies["policies"] if not x["isDefault"]]
+              
+              for policy in defined_policies:
+                  print(f"Deleting policy {policy['name']}")
+                  r = requests.delete(
+                      f"{CENTRAL}/{policy['id']}", verify=False, auth=("admin", ACS_ADMIN_PASSWORD)
+                  )
+                  print(r.status_code)
+              
+              with open("/tmp/policies-payload.json", "r") as f:
+                  new_policies = json.load(f)
+                  for policy in new_policies["policies"]:
+                      print(f"Adding {policy['name']}")
+                      r = requests.post(
+                        CENTRAL, verify=False, auth=("admin", ACS_ADMIN_PASSWORD), data=json.dumps(policy)
+                      )
+                      print(r.status_code)
+
+              EOF
+
+              python -Wignore policy-config.py
+
+          volumeMounts:
+          - name: policies-payload
+            mountPath: /tmp/
+          env:
+            - name: ACS_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: acs-central-admin-password
+                  key: password
+            - name: CENTRAL
+              value: https://central-stackrox.apps.cluster-vp4jr.vp4jr.sandbox1862.opentlc.com/v1/policies
+      volumes:
+      - name: policies-payload
+        configMap:
+          name: policies-payload
+      restartPolicy: Never
