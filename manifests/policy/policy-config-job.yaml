@@ -29,7 +29,7 @@ spec:
               CENTRAL = os.environ.get("CENTRAL")
               ACS_ADMIN_PASSWORD = os.environ.get("ACS_ADMIN_PASSWORD")
               
-              r = requests.get(CENTRAL, verify=False, auth=("admin", ACS_ADMIN_PASSWORD))
+              r = requests.get(f"{CENTRAL}/v1/policies", verify=False, auth=("admin", ACS_ADMIN_PASSWORD))
               policies = json.loads(r.text)
               
               defined_policies = [x for x in policies["policies"] if not x["isDefault"]]
