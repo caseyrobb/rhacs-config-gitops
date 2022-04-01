@@ -69,7 +69,7 @@ spec:
                   name: acs-central-admin-password
                   key: password
             - name: CENTRAL
-              value: https://central-stackrox.apps.cluster-vp4jr.vp4jr.sandbox1862.opentlc.com/v1/notifiers
+              value: https://central-stackrox.apps.cluster-vp4jr.vp4jr.sandbox1862.opentlc.com
       volumes:
       - name: notifier-payload
         secret:
