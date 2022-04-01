@@ -20,10 +20,13 @@ spec:
           - name: ACS_ADMIN_PASSWORD
             valueFrom: 
               secretKeyRef:
-                name: acs-central-admin-password
+                name: acs-central-config
                 key: password
           - name: CENTRAL
-            value: https://central-stackrox.apps.cluster-vp4jr.vp4jr.sandbox1862.opentlc.com
+            valueFrom:
+              secretKeyRef:
+                name: acs-central-config
+                key: uiendpoint
           - name: AUTHPROVIDER
             value: OpenShift
           volumeMounts:
