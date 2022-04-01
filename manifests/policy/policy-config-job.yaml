@@ -37,7 +37,7 @@ spec:
               for policy in defined_policies:
                   print(f"Deleting policy {policy['name']}")
                   r = requests.delete(
-                      f"{CENTRAL}/{policy['id']}", verify=False, auth=("admin", ACS_ADMIN_PASSWORD)
+                      f"{CENTRAL}/v1/policies/{policy['id']}", verify=False, auth=("admin", ACS_ADMIN_PASSWORD)
                   )
                   print(r.status_code)
               
@@ -46,7 +46,10 @@ spec:
                   for policy in new_policies["policies"]:
                       print(f"Adding {policy['name']}")
                       r = requests.post(
-                        CENTRAL, verify=False, auth=("admin", ACS_ADMIN_PASSWORD), data=json.dumps(policy)
+                        f"{CENTRAL}/v1/policies,
+                        verify=False,
+                        auth=("admin", ACS_ADMIN_PASSWORD),
+                        data=json.dumps(policy)
                       )
                       print(r.status_code)
 
@@ -64,7 +67,7 @@ spec:
                   name: acs-central-admin-password
                   key: password
             - name: CENTRAL
-              value: https://central-stackrox.apps.cluster-vp4jr.vp4jr.sandbox1862.opentlc.com/v1/policies
+              value: https://central-stackrox.apps.cluster-vp4jr.vp4jr.sandbox1862.opentlc.com
       volumes:
       - name: policies-payload
         configMap:
