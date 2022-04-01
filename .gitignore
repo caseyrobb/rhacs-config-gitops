@@ -4,4 +4,5 @@ acs-config-proj.yaml
 argocd-app-controller-crb.yaml
 auth-provider-job.yaml
 acsadmins-group.yaml
+*-payload.json
 kustomization.yaml
