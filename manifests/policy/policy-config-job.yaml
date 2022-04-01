@@ -46,7 +46,7 @@ spec:
                   for policy in new_policies["policies"]:
                       print(f"Adding {policy['name']}")
                       r = requests.post(
-                        f"{CENTRAL}/v1/policies,
+                        f"{CENTRAL}/v1/policies",
                         verify=False,
                         auth=("admin", ACS_ADMIN_PASSWORD),
                         data=json.dumps(policy)
