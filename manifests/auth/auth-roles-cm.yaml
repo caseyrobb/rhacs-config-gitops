@@ -12,3 +12,5 @@ data:
     - acsanalysts
     Continuous Integration:
     - acsci
+    Vulnerability Report Creator:
+    - acsreporters
