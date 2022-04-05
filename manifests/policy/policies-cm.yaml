@@ -8,7 +8,7 @@ data:
     {
       "policies": [
         {
-          "name": "CVE-2021-4034 - POLKIT Privilege Escalation",
+          "name": "CVE-2021-4034 - polkit Privilege Escalation",
           "SORTEnforcement": false,
           "SORTLifecycleStage": "BUILD,DEPLOY",
           "SORTName": "CVE-2021-4034 - polkit Privilege Escalation",
