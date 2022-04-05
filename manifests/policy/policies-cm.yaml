@@ -8,7 +8,7 @@ data:
     {
       "policies": [
         {
-          "name:": "CVE-2021-4034 - POLKIT Privilege Escalation",
+          "name": "CVE-2021-4034 - POLKIT Privilege Escalation",
           "SORTEnforcement": false,
           "SORTLifecycleStage": "BUILD,DEPLOY",
           "SORTName": "CVE-2021-4034 - polkit Privilege Escalation",
@@ -56,7 +56,7 @@ data:
           "whitelists": []
         },
         {
-          "name:": "CVE-2021-44228 - log4j Remote Code Execution Vulnerability",
+          "name": "CVE-2021-44228 - log4j Remote Code Execution Vulnerability",
           "SORTEnforcement": false,
           "SORTLifecycleStage": "BUILD,DEPLOY",
           "SORTName": "CVE-2021-44228 - log4j Remote Code Execution Vulnerability",
