@@ -43,7 +43,7 @@ spec:
                   print(r.status_code)
               
               with open("/tmp/policies-payload.json", "r") as f:
-                  new_policies = json.load(f)
+                  new_policies = json.load(f)[0]
                   for policy in new_policies["policies"]:
                       print(f"Adding {policy['name']}")
                       r = requests.post(
