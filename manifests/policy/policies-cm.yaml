@@ -23,7 +23,7 @@ data:
     class from the classpath.", "scope": [], "severity": "CRITICAL_SEVERITY", "whitelists":
     []}, {"name": "PwnKit: CVE-2021-4034 - pwnkit Privilege Escalation", "SORTEnforcement":
     true, "SORTLifecycleStage": "BUILD,DEPLOY", "SORTName": "PwnKit: CVE-2021-4034
-    - polkit Privilege Escalation", "categories": ["Vulnerability Management", "Privileges"],
+    - pwnkit Privilege Escalation", "categories": ["Vulnerability Management", "Privileges"],
     "criteriaLocked": false, "description": "Alert on deployments with images containing
     the polkit pkexec vulnerability (CVE-2021-4034). The polkit package is designed
     to define and handle policies that allow unprivileged processes to communicate
