@@ -21,7 +21,7 @@ data:
     are two possible mitigations for this flaw in versions from 2.10 to 2.14.1: Set
     the system property log4j2.formatMsgNoLookups to true, or remove the JndiLookup
     class from the classpath.", "scope": [], "severity": "CRITICAL_SEVERITY", "whitelists":
-    []}, {"name": "PwnKit: CVE-2021-4034 - polkit Privilege Escalation", "SORTEnforcement":
+    []}, {"name": "PwnKit: CVE-2021-4034 - pwnkit Privilege Escalation", "SORTEnforcement":
     true, "SORTLifecycleStage": "BUILD,DEPLOY", "SORTName": "PwnKit: CVE-2021-4034
     - polkit Privilege Escalation", "categories": ["Vulnerability Management", "Privileges"],
     "criteriaLocked": false, "description": "Alert on deployments with images containing
@@ -46,5 +46,5 @@ data:
 kind: ConfigMap
 metadata:
   creationTimestamp: null
-  name: policy-payload
+  name: policies-payload
   namespace: stackrox
