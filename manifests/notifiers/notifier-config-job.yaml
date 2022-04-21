@@ -31,6 +31,7 @@ spec:
               ACS_ADMIN_PASSWORD = os.environ.get("ACS_ADMIN_PASSWORD")
 
               r = requests.get(f"{CENTRAL}/v1/notifiers", verify=False, auth=("admin", ACS_ADMIN_PASSWORD))
+              print(f"{r.status_code} {r.reason}")
               notifiers = json.loads(r.text)
 
               prev_notifiers = [x for x in notifiers["notifiers"]]
@@ -69,6 +70,11 @@ spec:
                 secretKeyRef:
                   name: acs-central-config
                   key: password
+            - name: TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: acs-central-config
+                  key: token
             - name: CENTRAL
               valueFrom:
                 secretKeyRef:

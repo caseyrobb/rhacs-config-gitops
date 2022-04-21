@@ -30,7 +30,12 @@ spec:
               CENTRAL = os.environ.get("CENTRAL")
               ACS_ADMIN_PASSWORD = os.environ.get("ACS_ADMIN_PASSWORD")
               
-              r = requests.get(f"{CENTRAL}/v1/policies", verify=False, auth=("admin", ACS_ADMIN_PASSWORD))
+              r = requests.get(
+                  f"{CENTRAL}/v1/policies",
+                  verify=False,
+                  auth=("admin", f"{ACS_ADMIN_PASSWORD}")
+              )
+              print(f"{r.status_code} {r.reason}")
               policies = json.loads(r.text)
               
               defined_policies = [x for x in policies["policies"] if not x["isDefault"]]
@@ -38,7 +43,9 @@ spec:
               for policy in defined_policies:
                   print(f"Deleting policy {policy['name']}")
                   r = requests.delete(
-                      f"{CENTRAL}/v1/policies/{policy['id']}", verify=False, auth=("admin", ACS_ADMIN_PASSWORD)
+                      f"{CENTRAL}/v1/policies/{policy['id']}",
+                      verify=False,
+                      auth=("admin", f"{ACS_ADMIN_PASSWORD}")
                   )
                   print(r.status_code)
               
@@ -49,10 +56,10 @@ spec:
                       r = requests.post(
                         f"{CENTRAL}/v1/policies",
                         verify=False,
-                        auth=("admin", ACS_ADMIN_PASSWORD),
+                        auth=("admin", f"{ACS_ADMIN_PASSWORD}"),
                         data=json.dumps(policy)
                       )
-                      print(r.status_code)
+                      print(f"{r.status_code} {r.reason}")
 
               EOF
 
