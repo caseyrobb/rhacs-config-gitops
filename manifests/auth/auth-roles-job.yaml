@@ -59,6 +59,7 @@ spec:
               )["groups"]
               
               REQGROUPS = []
+              REQGROUPS.append(PREVGROUPS[0])
               with open("/tmp/authroles.yaml", "r") as f:
                   data = yaml.safe_load(f)
                   for role, groups in data.items():
@@ -77,7 +78,7 @@ spec:
                   auth=("admin", ACS_ADMIN_PASSWORD),
                   data=json.dumps(PAYLOAD),
               )
-
+              print(f"{GB.status_code} {GB.reason}")
               EOF
 
               python -Wignore authroles.py
