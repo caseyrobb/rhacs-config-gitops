@@ -70,11 +70,6 @@ spec:
                 secretKeyRef:
                   name: acs-central-config
                   key: password
-            - name: TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: acs-central-config
-                  key: token
             - name: CENTRAL
               valueFrom:
                 secretKeyRef:
