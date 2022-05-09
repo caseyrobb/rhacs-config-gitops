@@ -26,6 +26,7 @@ spec:
               import requests
               import json
               import os
+              import sys
 
               CENTRAL = os.environ.get("CENTRAL")
               ACS_ADMIN_PASSWORD = os.environ.get("ACS_ADMIN_PASSWORD")
@@ -34,28 +35,27 @@ spec:
               print(f"{r.status_code} {r.reason}")
               notifiers = json.loads(r.text)
 
-              prev_notifiers = [x for x in notifiers["notifiers"]]
+              prev_notifiers = [x["name"] for x in notifiers["notifiers"]]
               
-              for notifier in prev_notifiers:
-                print(f"Deleting {notifier['name']}")
-                s = requests.delete(
-                    f"{CENTRAL}/v1/notifiers/{notifier['id']}",
-                    verify=False,
-                    auth=("admin", ACS_ADMIN_PASSWORD)
-                )
-                print(s.status_code)
               
               with open("/tmp/notifier-payload.json", "r") as f:
                 new_notifiers = json.load(f)
                 for notifier in new_notifiers["notifiers"]:
-                  print(f"Adding {notifier['name']}")
-                  s = requests.post(
-                    f"{CENTRAL}/v1/notifiers",
-                    verify=False,
-                    auth=("admin", ACS_ADMIN_PASSWORD),
-                    data=json.dumps(notifier)
-                  )
-                  print(s.status_code)
+                  if notifier["name"] in prev_notifiers:
+                    print(f"Notifier {notifier['name'] already exists, skipping")
+                    continue
+                  else:
+                    print(f"Adding {notifier['name']}")
+                    s = requests.post(
+                      f"{CENTRAL}/v1/notifiers",
+                      verify=False,
+                      auth=("admin", ACS_ADMIN_PASSWORD),
+                      data=json.dumps(notifier)
+                    )
+                    print(f"{s.status_code} {s.reason}")
+                    if s.status_code != 200:
+                      sys.exit(1)
+                    
 
               EOF
 
