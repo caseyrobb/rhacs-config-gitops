@@ -42,7 +42,7 @@ spec:
                 new_notifiers = json.load(f)
                 for notifier in new_notifiers["notifiers"]:
                   if notifier["name"] in prev_notifiers:
-                    print(f"Notifier {notifier['name'] already exists, skipping")
+                    print(f"Notifier {notifier['name']} already exists, skipping")
                     continue
                   else:
                     print(f"Adding {notifier['name']}")
